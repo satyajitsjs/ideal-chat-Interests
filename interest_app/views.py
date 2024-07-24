@@ -36,13 +36,17 @@ def user_login(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_list(request):
-    users = User.objects.all()
+    current_user = request.user
+    if current_user.is_superuser or current_user.is_staff:
+        users = User.objects.exclude(is_superuser=True)
+    else:
+        users = User.objects.exclude(id=current_user.id).exclude(is_superuser=True)
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def own_details(request):
+def user_details(request):
     user = request.user
     serializer = UserSerializer(user)
     return Response(serializer.data)
@@ -77,11 +81,37 @@ def interest_update(request, pk):
     except Interest.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    print(request.data)
+
     serializer = InterestSerializer(interest, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_friends(user):
+    accepted_interests = Interest.objects.filter(
+        (models.Q(sender=user) | models.Q(recipient=user)) & models.Q(accepted=True)
+    )
+
+    friends = set()
+    for interest in accepted_interests:
+        if interest.sender == user:
+            friends.add(interest.recipient)
+        else:
+            friends.add(interest.sender)
+
+    return friends
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def friend_list_view(request):
+    user = request.user
+    friends = get_friends(user)
+    serializer = UserSerializer(friends, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

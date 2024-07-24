@@ -29,12 +29,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email']
 
 class InterestSerializer(serializers.ModelSerializer):
-    sender = UserSerializer(read_only=True)
-    recipient = UserSerializer(read_only=True)
-
     class Meta:
         model = Interest
-        fields = ['id', 'sender', 'recipient', 'message', 'created_at']
+        fields = '__all__'
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     class Meta:
