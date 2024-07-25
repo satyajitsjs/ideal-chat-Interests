@@ -16,6 +16,8 @@ urlpatterns = [
 
     path('friends/', friend_list_view, name='friend-list'),
 
-    path('chat-messages/<int:chat_id>/', chat_message_list, name='chat-message-list'),
-    path('chat-messages/create/', chat_message_create, name='chat-message-create'),
+    path('chat-messages/<str:room_name>/', chat_message_list, name='chat-message-list'),
+    path('chat-messages/', chat_message_create, name='chat-message-create'),
+
+    path('messages/<str:friend_username>/', fetch_old_messages, name='fetch_old_messages'),
 ]

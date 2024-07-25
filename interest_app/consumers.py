@@ -33,8 +33,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         sender_username = text_data_json['sender']
         recipient_username = text_data_json['recipient']
 
+        # Debugging
+        print(f"Received message: {message}")
+        print(f"Sender: {sender_username}")
+        print(f"Recipient: {recipient_username}")
+
         # Save message to database
-        await self.save_message(sender_username, recipient_username, message)
+        await self.save_message(sender_username, recipient_username, message, self.room_name)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -60,10 +65,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
     @database_sync_to_async
-    def save_message(self, sender_username, recipient_username, message):
+    def save_message(self, sender_username, recipient_username, message, room_name):
         try:
             sender = User.objects.get(username=sender_username)
             recipient = User.objects.get(username=recipient_username)
-            ChatMessage.objects.create(sender=sender, recipient=recipient, message=message)
+            ChatMessage.objects.create(
+                sender=sender,
+                recipient=recipient,
+                message=message,
+                room_name=room_name  # Save room_name here
+            )
         except User.DoesNotExist:
             pass  # Handle the case where the user does not exist if necessary

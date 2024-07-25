@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const MessageInput = ({ onSendMessage, senderUsername, friendUsername }) => {
+const MessageInput = ({ socket, senderUsername, friendUsername, onSendMessage }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e) => {

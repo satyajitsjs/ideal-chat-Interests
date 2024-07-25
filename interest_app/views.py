@@ -150,6 +150,16 @@ def chat_message_create(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def fetch_old_messages(request, friend_username):
+    user = request.user
+    messages = ChatMessage.objects.filter(
+        sender__username=user.username, recipient__username=friend_username
+    ) | ChatMessage.objects.filter(
+        sender__username=friend_username, recipient__username=user.username
+    )
+    serializer = ChatMessageSerializer(messages, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

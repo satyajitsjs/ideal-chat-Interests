@@ -1,4 +1,3 @@
-// ChatArea.js
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import MessageInput from "./MessageInput";
@@ -13,13 +12,14 @@ const ChatArea = ({ roomName, friendId, friendUsername }) => {
   const fetchChatMessages = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/chat-messages/${friendId}/`,
+        `http://localhost:8000/api/chat-messages/${encodeURIComponent(roomName)}/`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
           },
         }
       );
+      console.log(response.data)
       setMessages(response.data);
     } catch (error) {
       console.error("Error fetching chat messages:", error);
@@ -27,26 +27,29 @@ const ChatArea = ({ roomName, friendId, friendUsername }) => {
   };
 
   const isMessageSentByCurrentUser = (sender) => {
-    return sender === senderUsername ? "sent" : "received";
+    return sender === senderUsername ? "sent" : "recived";
   };
 
   const handleSendMessage = (message) => {
+    console.log("Sending message:", message);
+    console.log("Sender:", senderUsername);
+    console.log("Recipient:", friendUsername);
+
     if (socket.current) {
       socket.current.send(
         JSON.stringify({
           message: message,
-          sender: senderUsername,
-          recipient: friendUsername,
+          sender: senderUsername,  // Check this value
+          recipient: friendUsername // Check this value
         })
       );
     }
   };
 
+
   useEffect(() => {
     fetchChatMessages();
-    // Frontend WebSocket URL should match the pattern in routing.py
     socket.current = new WebSocket(`ws://localhost:8000/ws/chat/${encodeURIComponent(roomName)}/`);
-
 
     socket.current.onopen = () => {
       console.log("WebSocket connected");
