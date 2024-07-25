@@ -24,7 +24,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/user" element={<UserDetails />} />
             <Route path="/userlist" element={<UserList />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat/:friendId/:username" element={<Chat />} />
             <Route path="/friends" element={<ShowInvites />} />
           </Routes>
       </BrowserRouter>

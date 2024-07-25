@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { List, ListItem, ListItemText, Avatar, Typography } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Avatar,
+  Typography,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const [friends, setFriends] = useState([]);
@@ -34,20 +41,25 @@ export default function Sidebar() {
       </Typography>
       <List>
         {friends.map((friend) => (
-          <ListItem
-            button
-            key={friend.id}
-            style={{ padding: "10px 20px", borderBottom: "1px solid #34495e" }}
-          >
-            <Avatar alt={friend.username} src="/path/to/avatar.jpg" />
-            <ListItemText
-              primary={friend.username}
-              secondary={friend.email}
-              style={{ marginLeft: "15px" }}
-              primaryTypographyProps={{ style: { color: "#ecf0f1" } }}
-              secondaryTypographyProps={{ style: { color: "#bdc3c7" } }}
-            />
-          </ListItem>
+          <Link to={`/chat/${friend.id}/${friend.username}`}>
+            <ListItem
+              button
+              key={friend.id}
+              style={{
+                padding: "10px 20px",
+                borderBottom: "1px solid #34495e",
+              }}
+            >
+              <Avatar alt={friend.username} src="/path/to/avatar.jpg" />
+              <ListItemText
+                primary={friend.username}
+                secondary={friend.email}
+                style={{ marginLeft: "15px" }}
+                primaryTypographyProps={{ style: { color: "#ecf0f1" } }}
+                secondaryTypographyProps={{ style: { color: "#bdc3c7" } }}
+              />
+            </ListItem>
+          </Link>
         ))}
       </List>
     </div>

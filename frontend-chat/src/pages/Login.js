@@ -17,10 +17,11 @@ export default function Login() {
         username,
         password,
       });
-      console.log("Login successful:", response.data);
-      localStorage.setItem("token", response.data.token);
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
       toast.success("Login successful!");
-      navigate("/user");  // Replace '/dashboard' with the actual path you want to navigate to
+      navigate("/user");
     } catch (error) {
       console.error("There was an error logging in:", error);
       toast.error("Login failed. Please check your username and password.");

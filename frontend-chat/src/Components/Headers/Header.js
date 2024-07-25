@@ -37,7 +37,7 @@ export default function Header() {
             <Button color="inherit" component={Link} to="/user">
               User
             </Button>
-            <Button color="inherit" component={Link} to="/chat">
+            <Button color="inherit" component={Link} to="/chat/*/*">
               Chat
             </Button>
             <Button color="inherit" component={Link} to="/friends">

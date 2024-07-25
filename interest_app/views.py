@@ -29,9 +29,13 @@ def user_login(request):
     if user is not None:
         login(request, user)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key}, status=status.HTTP_200_OK)
-    return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+        user_serializer = UserSerializer(user)
+        return Response({
+            'token': token.key,
+            'user': user_serializer.data
+        }, status=status.HTTP_200_OK)
 
+    return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -129,8 +133,11 @@ def friend_list_view(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def chat_message_list(request):
-    chat_messages = ChatMessage.objects.filter(recipient=request.user)
+def chat_message_list(request, chat_id):
+    user = request.user
+    chat_messages = ChatMessage.objects.filter(
+        Q(sender=user, recipient_id=chat_id) | Q(sender_id=chat_id, recipient=user)
+    ).order_by('created_at')  # Ensure ordering by creation time
     serializer = ChatMessageSerializer(chat_messages, many=True)
     return Response(serializer.data)
 
