@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export default function MessageInput() {
-  const {inputValue ,setInputValue} = useState("");
+  const [inputValue ,setInputValue] = useState("");
   const handelInputValue=(e)=>{
     setInputValue(e.target.value)
   }
@@ -13,7 +13,7 @@ export default function MessageInput() {
       <textarea
         placeholder="Type your message here ....."
         value={inputValue}
-        onChange={handelInputValue}
+        onChange={(e)=>handelInputValue(e)}
       />
       <button onClick={handeldSendMessage}>Send</button>
     </div>

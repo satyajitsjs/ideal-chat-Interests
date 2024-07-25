@@ -37,12 +37,15 @@ def user_login(request):
 @permission_classes([IsAuthenticated])
 def user_list(request):
     current_user = request.user
+    sent_requests = Interest.objects.filter(sender=current_user).values_list('recipient', flat=True)
     if current_user.is_superuser or current_user.is_staff:
-        users = User.objects.exclude(is_superuser=True)
+        users = User.objects.exclude(id__in=sent_requests).exclude(is_superuser=True)
     else:
-        users = User.objects.exclude(id=current_user.id).exclude(is_superuser=True)
+        users = User.objects.exclude(id=current_user.id).exclude(id__in=sent_requests).exclude(is_superuser=True)
+
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -62,6 +65,7 @@ def interest_create(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -89,6 +93,16 @@ def interest_update(request, pk):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def interest_delete(request, pk):
+    try:
+        interest = Interest.objects.get(pk=pk, sender=request.user)
+    except Interest.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    interest.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 def get_friends(user):
     accepted_interests = Interest.objects.filter(
@@ -128,3 +142,20 @@ def chat_message_create(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def sent_interests_list(request):
+    user = request.user
+    sent_interests = Interest.objects.filter(sender=user)
+    serializer = InterestSerializer(sent_interests, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def received_interests_list(request):
+    user = request.user
+    received_interests = Interest.objects.filter(recipient=user)
+    serializer = InterestSerializer(received_interests, many=True)
+    return Response(serializer.data)

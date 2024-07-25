@@ -11,6 +11,7 @@ import UserDetails from "./pages/userDetails";
 import UserList from "./pages/UserList";
 import { ToastContainer } from "react-toastify";
 import Chat from "./pages/Chat";
+import ShowInvites from "./pages/ShowInvites";
 import "./App.css"
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/user" element={<UserDetails />} />
             <Route path="/userlist" element={<UserList />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/friends" element={<ShowInvites />} />
           </Routes>
       </BrowserRouter>
       <ToastContainer />

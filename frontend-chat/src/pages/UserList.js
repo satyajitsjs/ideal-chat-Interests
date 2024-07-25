@@ -27,28 +27,27 @@ export default function UserList() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // Fetch users from backend
-    const fetchUsers = async () => {
-      try {
-        // Get the token from localStorage
-        const token = localStorage.getItem("token");
-
-        // Configure axios request with the token
-        const response = await axios.get("http://localhost:8000/api/users/", {
-          headers: {
-            Authorization: `Token ${token}`, // Replace 'Token' with 'Bearer' if you're using Bearer tokens
-          },
-        });
-
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        toast.error("Error fetching users");
-      }
-    };
-
     fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      // Get the token from localStorage
+      const token = localStorage.getItem("token");
+
+      // Configure axios request with the token
+      const response = await axios.get("http://localhost:8000/api/users/", {
+        headers: {
+          Authorization: `Token ${token}`, // Replace 'Token' with 'Bearer' if you're using Bearer tokens
+        },
+      });
+
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      toast.error("Error fetching users");
+    }
+  };
 
   const handleClickOpen = (user) => {
     setSelectedUser(user);
@@ -64,10 +63,7 @@ export default function UserList() {
   const handleSendMessage = async () => {
     if (selectedUser) {
       try {
-        // Get the token from localStorage
         const token = localStorage.getItem("token");
-
-        // Send a POST request to create an interest
         const response = await axios.post(
           "http://localhost:8000/api/interests/create/",
           {
@@ -82,6 +78,7 @@ export default function UserList() {
         );
 
         console.log("Message sent successfully:", response.data);
+        fetchUsers();
         toast.success("Message sent successfully");
       } catch (error) {
         console.error("Error sending message:", error);

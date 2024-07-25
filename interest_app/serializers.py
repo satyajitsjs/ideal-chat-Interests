@@ -29,9 +29,18 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email']
 
 class InterestSerializer(serializers.ModelSerializer):
+    sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    recipient = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
     class Meta:
         model = Interest
         fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['sender'] = UserSerializer(instance.sender).data
+        representation['recipient'] = UserSerializer(instance.recipient).data
+        return representation
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     class Meta:
