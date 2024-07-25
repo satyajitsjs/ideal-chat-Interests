@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const MessageInput = ({ onSendMessage }) => {
-  const [inputValue, setInputValue] = useState('');
+const MessageInput = ({ onSendMessage, senderUsername, friendUsername }) => {
+  const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
   const handleSendMessage = () => {
-    if (inputValue.trim()) {
+    if (inputValue.trim() !== "") {
       onSendMessage(inputValue);
-      setInputValue('');
+      setInputValue("");
     }
   };
 
   return (
     <div className="message-input">
       <textarea
-        placeholder="Type your message here ....."
+        placeholder={`Type your message here, ${senderUsername}...`}
         value={inputValue}
         onChange={handleInputChange}
       />

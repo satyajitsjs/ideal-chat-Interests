@@ -133,11 +133,11 @@ def friend_list_view(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def chat_message_list(request, chat_id):
+def chat_message_list(request, room_name):
     user = request.user
     chat_messages = ChatMessage.objects.filter(
-        Q(sender=user, recipient_id=chat_id) | Q(sender_id=chat_id, recipient=user)
-    ).order_by('created_at')  # Ensure ordering by creation time
+        Q(room_name=room_name) & (Q(sender=user) | Q(recipient=user))
+    ).order_by('created_at')
     serializer = ChatMessageSerializer(chat_messages, many=True)
     return Response(serializer.data)
 

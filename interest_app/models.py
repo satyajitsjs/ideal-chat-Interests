@@ -26,6 +26,7 @@ class ChatMessage(models.Model):
     recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    room_name = models.CharField(max_length=255)
 
     def __str__(self):
         return f"From {self.sender.username} to {self.recipient.username}: {self.message[:50]}"
