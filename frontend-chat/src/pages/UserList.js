@@ -19,12 +19,15 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../Components/Headers/Header";
+import ApiURL from "../Components/BaseURL/ApiURL";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState("");
+  const APIURL = ApiURL();
+
 
   useEffect(() => {
     fetchUsers();
@@ -36,7 +39,7 @@ export default function UserList() {
       const token = localStorage.getItem("token");
 
       // Configure axios request with the token
-      const response = await axios.get("http://localhost:8000/api/users/", {
+      const response = await axios.get(`${APIURL}users/`, {
         headers: {
           Authorization: `Token ${token}`, // Replace 'Token' with 'Bearer' if you're using Bearer tokens
         },
@@ -65,7 +68,7 @@ export default function UserList() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.post(
-          "http://localhost:8000/api/interests/create/",
+          `${APIURL}interests/create/`,
           {
             recipient: selectedUser.id,
             message: message,

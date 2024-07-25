@@ -2,17 +2,22 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import MessageInput from "./MessageInput";
 import Message from "./Message";
+import ApiURL from "../BaseURL/ApiURL";
+import WsURL from "../BaseURL/WsURL";
 
 const ChatArea = ({ roomName, friendId, friendUsername }) => {
   const [messages, setMessages] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
   const senderUsername = user.username;
+  const senderUserid = user.id;
   const socket = useRef(null);
+  const APIURL = ApiURL();
+  const WSURL = WsURL();
 
   const fetchChatMessages = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/chat-messages/${encodeURIComponent(roomName)}/`,
+        `${APIURL}chat-messages/${encodeURIComponent(roomName)}/`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
@@ -27,7 +32,7 @@ const ChatArea = ({ roomName, friendId, friendUsername }) => {
   };
 
   const isMessageSentByCurrentUser = (sender) => {
-    return sender === senderUsername ? "sent" : "recived";
+    return sender === senderUserid ? "sent" : "received";
   };
 
   const handleSendMessage = (message) => {
@@ -49,7 +54,7 @@ const ChatArea = ({ roomName, friendId, friendUsername }) => {
 
   useEffect(() => {
     fetchChatMessages();
-    socket.current = new WebSocket(`ws://localhost:8000/ws/chat/${encodeURIComponent(roomName)}/`);
+    socket.current = new WebSocket(`${WSURL}chat/${encodeURIComponent(roomName)}/`);
 
     socket.current.onopen = () => {
       console.log("WebSocket connected");

@@ -8,15 +8,17 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import ApiURL from "../BaseURL/ApiURL";
 
 export default function Sidebar() {
   const [friends, setFriends] = useState([]);
+  const APIURL = ApiURL();
 
   useEffect(() => {
     const fetchFriends = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8000/api/friends/", {
+        const response = await axios.get(`${APIURL}friends/`, {
           headers: {
             Authorization: `Token ${token}`,
           },

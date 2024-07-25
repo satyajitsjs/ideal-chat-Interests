@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Grid, Card, CardContent, Typography, Button } from "@mui/material";
 import Header from "../Components/Headers/Header";
+import ApiURL from "../Components/BaseURL/ApiURL";
 
 export default function InterestRequests() {
   const [sentInterests, setSentInterests] = useState([]);
   const [receivedInterests, setReceivedInterests] = useState([]);
+  const APIURL = ApiURL();
 
   useEffect(() => {
     const fetchInterests = async () => {
@@ -13,7 +15,7 @@ export default function InterestRequests() {
         const token = localStorage.getItem("token");
 
         const sentResponse = await axios.get(
-          "http://localhost:8000/api/interests/sent/",
+          `${APIURL}interests/sent/`,
           {
             headers: { Authorization: `Token ${token}` },
           }
@@ -21,7 +23,7 @@ export default function InterestRequests() {
         setSentInterests(sentResponse.data);
 
         const receivedResponse = await axios.get(
-          "http://localhost:8000/api/interests/received/",
+          `${APIURL}interests/received/`,
           {
             headers: { Authorization: `Token ${token}` },
           }
@@ -39,7 +41,7 @@ export default function InterestRequests() {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:8000/api/interests/${id}/update/`,
+        `${APIURL}interests/${id}/update/`,
         { accepted },
         {
           headers: { Authorization: `Token ${token}` },
@@ -59,7 +61,7 @@ export default function InterestRequests() {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:8000/api/interests/${id}/`,
+        `${APIURL}interests/${id}/`,
         {
           headers: { Authorization: `Token ${token}` },
         }

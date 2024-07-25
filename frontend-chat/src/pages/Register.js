@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../Components/Headers/Header";
 import 'react-toastify/dist/ReactToastify.css';
+import ApiURL from "../Components/BaseURL/ApiURL";
 
 export default function Register() {
   // State hooks to manage input values
@@ -12,19 +13,19 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); // Initialize navigate
+  const APIURL = ApiURL();
 
   const submitEvent = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/api/register/", {
+      const response = await axios.post(`${APIURL}register/`, {
         username,
         email,
         password,
       });
 
       console.log("Registration successful:", response.data);
-      localStorage.setItem("token",response.data.token)
       toast.success("Registration successful!");
-      navigate("/user"); // Navigate to login page upon success
+      navigate("/login"); // Navigate to login page upon success
     } catch (error) {
       console.error("There was an error registering:", error);
       toast.error("Registration failed. Please try again.");

@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Container, Grid, Paper, Typography, Box } from '@mui/material';
 import axios from 'axios';
 import Header from '../Components/Headers/Header';
+import ApiURL from '../Components/BaseURL/ApiURL';
 
 export default function UserDetails() {
   // State to store user details
   const [user, setUser] = useState(null);
+  const APIURL = ApiURL();
 
   useEffect(() => {
     // Fetch user details from API
     const fetchUserDetails = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8000/api/user-details/', {
+        const response = await axios.get(`${APIURL}user-details/`, {
           headers: {
             'Authorization': `Token ${token}`
           }
