@@ -1,5 +1,5 @@
 export default function WsURL() {
-  const wsUrl = 'ws://192.168.1.22:8000/ws/';
+  const wsUrl = 'ws://192.168.89.240:8000/ws/';
   return wsUrl;
 }
 

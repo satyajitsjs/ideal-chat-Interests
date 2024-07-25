@@ -32,7 +32,7 @@ const ChatArea = ({ roomName, friendId, friendUsername }) => {
   };
 
   const isMessageSentByCurrentUser = (sender) => {
-    return sender === senderUserid ? "sent" : "received";
+    return (sender === senderUsername || sender === senderUserid) ? "sent" : "received";
   };
 
   const handleSendMessage = (message) => {
@@ -53,6 +53,10 @@ const ChatArea = ({ roomName, friendId, friendUsername }) => {
 
 
   useEffect(() => {
+    const pathname = window.location.pathname;
+    if (pathname.includes("*")) {
+      return;
+    }
     fetchChatMessages();
     socket.current = new WebSocket(`${WSURL}chat/${encodeURIComponent(roomName)}/`);
 
