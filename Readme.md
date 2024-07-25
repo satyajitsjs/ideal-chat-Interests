@@ -14,14 +14,14 @@ Welcome to the Ideal Chat Interests project! This repository contains both the b
 
 ## Project Structure
 ideal-chat-interests/ 
-├── db.sqlite3 
-├── envsmart/ 
-├── frontend-chat/ 
-├── ideal_chat_interests/ 
-├── interest_app/ 
-├── manage.py 
-├── Readme.md 
-└── requirements.txt
+- ├── db.sqlite3 
+- ├── envsmart/ 
+- ├── frontend-chat/ 
+- ├── ideal_chat_interests/ 
+- ├── interest_app/ 
+- ├── manage.py 
+- ├── Readme.md 
+- └── requirements.txt
 
 
 ## Getting Started
