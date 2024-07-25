@@ -1,4 +1,4 @@
 export default function ApiURL() {
-  const apiUrl = 'http://192.168.89.240:8000/api/';
+  const apiUrl = `http://${process.env.REACT_APP_COMMON_URL}/api/`;
   return apiUrl;
 }

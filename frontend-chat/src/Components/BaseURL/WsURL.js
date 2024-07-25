@@ -1,5 +1,5 @@
 export default function WsURL() {
-  const wsUrl = 'ws://192.168.89.240:8000/ws/';
+  const wsUrl = `ws://${process.env.REACT_APP_COMMON_URL}/ws/`;
   return wsUrl;
 }
 
