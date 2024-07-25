@@ -13,6 +13,7 @@ urlpatterns = [
     path('interests/sent/', sent_interests_list, name='sent_interests_list'),
     path('interests/received/', received_interests_list, name='received_interests_list'),
     path('interests/<int:pk>/', interest_delete, name='interest-delete'),
+    path('interests/<int:pk>/reject/', reject_interest, name='interest-reject'),  # New URL pattern
 
     path('friends/', friend_list_view, name='friend-list'),
 

@@ -108,6 +108,18 @@ def interest_delete(request, pk):
     interest.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def reject_interest(request, pk):
+    try:
+        interest = Interest.objects.get(pk=pk)
+        interest.delete()
+        return Response({'message': 'Interest rejected successfully'}, status=200)
+    except Interest.DoesNotExist:
+        return Response({'error': 'Interest not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
 def get_friends(user):
     accepted_interests = Interest.objects.filter(
         (models.Q(sender=user) | models.Q(recipient=user)) & models.Q(accepted=True)
