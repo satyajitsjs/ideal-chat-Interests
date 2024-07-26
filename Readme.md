@@ -38,8 +38,9 @@ ideal-chat-interests/
 2. **Create and activate a virtual environment:**
 
     ```sh
-    python -m venv envsmart
-    source envsmart/Scripts/activate  # On Windows
+    pip install virtualenv
+    virtualenv envsmart
+    ./envsmart/Scripts/activate  # On Windows
     # source envsmart/bin/activate    # On macOS/Linux
     ```
 
